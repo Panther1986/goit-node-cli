@@ -25,7 +25,9 @@
     "nodemon": "^3.1.0"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
-    "kill-port-process": "^3.2.1"
+    "kill-port-process": "^3.2.1",
+    "pino-http": "^10.1.0"
   }
 }
