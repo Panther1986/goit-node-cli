@@ -2,7 +2,9 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 import { env } from './utils/env.js';
-import { getAllStudents, getStudentById } from './services/students.js';
+import studentsRouter from './routers/students.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 const PORT = Number(env('PORT', '3002'));
 
@@ -26,35 +28,11 @@ export const startServer = () => {
     });
   });
 
-  app.get('/students', async (req, res) => {
-    const students = await getAllStudents();
+  app.use(studentsRouter);
 
-    res.status(200).json({
-      data: students,
-    });
-  });
+  app.use('*', notFoundHandler);
 
-  app.get('/students/:studentId', async (req, res) => {
-    const { studentId } = req.params;
-    const student = await getStudentById(studentId);
-
-    res.status(200).json({
-      data: student,
-    });
-  });
-
-  app.use('*', (req, res, next) => {
-    res.status(404).json({
-      message: 'Not found',
-    });
-  });
-
-  app.use((err, req, res, next) => {
-    res.status(500).json({
-      message: 'Something went wrong',
-      error: err.message,
-    });
-  });
+  app.use(errorHandler);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
