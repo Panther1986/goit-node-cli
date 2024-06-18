@@ -1,5 +1,5 @@
-import { string } from 'joi';
 import { Schema, model } from 'mongoose';
+import { ROLES } from '../../constants/index.js';
 
 const userShema = new Schema(
   {
@@ -15,6 +15,11 @@ const userShema = new Schema(
     password: {
       type: String,
       required: true,
+    },
+    role: {
+      type: String,
+      enum: [ROLES.TEACHER, ROLES.PARENT],
+      default: ROLES.PARENT,
     },
   },
   { timestamps: true, versionKey: false },
